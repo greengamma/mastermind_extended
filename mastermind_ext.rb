@@ -113,16 +113,18 @@ until game_over
     puts codebreaker.display_user_colors
     puts "\n"
     game_over, compare_result = board.compare_codemaker_codebreaker
-    p compare_result
+    puts "Result: #{compare_result}"
     puts "\n"
-  else
-    nil
+    if game_over == true
+      puts "You won! The computer chose the following colors: #{codemaker.codemaker_colors}!"
+    end
+  elsif user_choice == '1'
+
   end
   counter += 1
 end
 
 # After game over
-puts "You won! The computer chose the following colors: #{codemaker.codemaker_colors}!"
   # USER is Codebreaker - end
 
 
