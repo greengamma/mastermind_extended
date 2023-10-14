@@ -14,7 +14,7 @@ class Codemaker
                     @color_selection.sample
                     ]
     else # user is the codemaker and specifies the code
-      puts "Input 4 of the following colors to generate your code: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
+      puts "Input 4 of the following colors to generate your code: #{@color_selection}"
       puts "Select color 1: "
       color1 = gets.chomp
       puts "Select color 2: "
@@ -33,17 +33,18 @@ class Codebreaker
   attr_reader :codebreaker_colors
 
   def initialize
+    @color_selection = ['yellow', 'blue', 'green', 'red', 'orange', 'purple']
     @codebreaker_colors = []
   end
 
-  def get_user_colors(counter)
+  def get_user_colors(counter) # if user is the codebreaker
     @codebreaker_colors = []
     if counter == 0
       puts "Please enter 4 colors of your choice in consecutive order. \n"
-      puts "The available colors are: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
+      puts "The available colors are: #{@color_selection}"
     else
       puts "--- ROUND #{counter+1} ---"
-      puts "Try again with these colors: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
+      puts "Try again with these colors: #{@color_selection}"
     end
     puts "Select color 1: "
     color1 = gets.chomp
@@ -56,17 +57,24 @@ class Codebreaker
     @codebreaker_colors.push(color1, color2, color3, color4)
   end
 
-  def comp_generated_colors
-    @codemaker_colors = [
-    @color_selection.sample,
-    @color_selection.sample,
-    @color_selection.sample,
-    @color_selection.sample
-    ]
+  def comp_generated_colors(counter) # if comp is the codebreaker
+    @codebreaker_colors = []
+    if counter == 0
+      puts "Computer trying..."
+    else
+      puts "Computer trying again..."
+      puts "--- ROUND #{counter+1} ---"
+    end
+    @codebreaker_colors = [
+      @color_selection.sample,
+      @color_selection.sample,
+      @color_selection.sample,
+      @color_selection.sample
+      ]
   end
 
-  def display_user_colors
-    puts "You selected: #{@codebreaker_colors}"
+  def display_chosen_colors
+    puts "Colors selected: #{@codebreaker_colors}"
   end
 end
 
@@ -102,15 +110,22 @@ board = Board.new(codemaker, codebreaker)
 # run loop a maximum of 12 times and check for game over
 counter = 0
 game_over = false
+
 until game_over
   if counter == 12
-    puts "You lost!\n"
-    puts "The computer chose the following colors: #{codemaker.codemaker_colors}!"
-    break
-  elsif user_choice == '2'
+    if user_choice == '2'
+      puts "You lost!\n"
+      puts "The computer chose the following colors: #{codemaker.codemaker_colors}!"
+      break
+    elsif user_choice == '1'
+      puts "The computer lost!\n"
+      puts "You chose the following colors: #{codemaker.codemaker_colors}!"
+      break
+    end
+  elsif user_choice == '2' # user is the codebreaker
     codebreaker.get_user_colors(counter)
     puts "\n"
-    puts codebreaker.display_user_colors
+    puts codebreaker.display_chosen_colors
     puts "\n"
     game_over, compare_result = board.compare_codemaker_codebreaker
     puts "Result: #{compare_result}"
@@ -118,8 +133,17 @@ until game_over
     if game_over == true
       puts "You won! The computer chose the following colors: #{codemaker.codemaker_colors}!"
     end
-  elsif user_choice == '1'
-
+  elsif user_choice == '1' # comp is the codebreaker
+    codebreaker.comp_generated_colors(counter)
+    puts "\n"
+    puts codebreaker.display_chosen_colors
+    puts "\n"
+    game_over, compare_result = board.compare_codemaker_codebreaker
+    puts "Result: #{compare_result}"
+    puts "\n"
+    if game_over == true
+      puts "The computer won! You chose the following colors: #{codemaker.codemaker_colors}!"
+    end
   end
   counter += 1
 end
