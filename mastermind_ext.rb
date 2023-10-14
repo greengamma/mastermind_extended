@@ -3,16 +3,17 @@ class Codemaker
   attr_reader :codemaker_colors
 
   def initialize(user_choice)
+    @user_choice = user_choice
     @color_selection = ['yellow', 'blue', 'green', 'red', 'orange', 'purple']
     @codemaker_colors = []
-    if user_choice == 2 # comp is the codemaker
+    if @user_choice == '2' # comp is the codemaker and generates random colors
       @codemaker_colors = [
                     @color_selection.sample,
                     @color_selection.sample,
                     @color_selection.sample,
                     @color_selection.sample
                     ]
-    else # user is the codemaker
+    else # user is the codemaker and specifies the code
       puts "Input 4 of the following colors to generate your code: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
       puts "Select color 1: "
       color1 = gets.chomp
@@ -31,47 +32,38 @@ end
 class Codebreaker
   attr_reader :codebreaker_colors
 
-  def initialize(user_choice)
+  def initialize
     @codebreaker_colors = []
   end
 
-    if user_choice == 2 # user is the codebreaker
-      def get_user_colors(counter)
-        @codebreaker_colors = []
-        if counter == 0
-          puts "Please enter 4 colors of your choice in consecutive order. \n"
-          puts "The available colors are: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
-          puts "Select color 1: "
-          color1 = gets.chomp
-          puts "Select color 2: "
-          color2 = gets.chomp
-          puts "Select color 3: "
-          color3 = gets.chomp
-          puts "Select color 4: "
-          color4 = gets.chomp
-          @codebreaker_colors.push(color1, color2, color3, color4)
-        else
-          puts "--- ROUND #{counter+1} ---"
-          puts "Try again with these colors: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
-          puts "Select color 1: "
-          color1 = gets.chomp
-          puts "Select color 2: "
-          color2 = gets.chomp
-          puts "Select color 3: "
-          color3 = gets.chomp
-          puts "Select color 4: "
-          color4 = gets.chomp
-          @codebreaker_colors.push(color1, color2, color3, color4)
-        end
-      end
-    else # comp is the codebreaker
-      @codemaker_colors = [
-        @color_selection.sample,
-        @color_selection.sample,
-        @color_selection.sample,
-        @color_selection.sample
-        ]
+  def get_user_colors(counter)
+    @codebreaker_colors = []
+    if counter == 0
+      puts "Please enter 4 colors of your choice in consecutive order. \n"
+      puts "The available colors are: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
+    else
+      puts "--- ROUND #{counter+1} ---"
+      puts "Try again with these colors: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
     end
+    puts "Select color 1: "
+    color1 = gets.chomp
+    puts "Select color 2: "
+    color2 = gets.chomp
+    puts "Select color 3: "
+    color3 = gets.chomp
+    puts "Select color 4: "
+    color4 = gets.chomp
+    @codebreaker_colors.push(color1, color2, color3, color4)
+  end
+
+  def comp_generated_colors
+    @codemaker_colors = [
+    @color_selection.sample,
+    @color_selection.sample,
+    @color_selection.sample,
+    @color_selection.sample
+    ]
+  end
 
   def display_user_colors
     puts "You selected: #{@codebreaker_colors}"
@@ -115,7 +107,7 @@ until game_over
     puts "You lost!\n"
     puts "The computer chose the following colors: #{codemaker.codemaker_colors}!"
     break
-  else
+  elsif user_choice == '2'
     codebreaker.get_user_colors(counter)
     puts "\n"
     puts codebreaker.display_user_colors
@@ -123,6 +115,8 @@ until game_over
     game_over, compare_result = board.compare_codemaker_codebreaker
     p compare_result
     puts "\n"
+  else
+    nil
   end
   counter += 1
 end
