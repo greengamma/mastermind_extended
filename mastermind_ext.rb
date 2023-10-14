@@ -147,14 +147,3 @@ until game_over
   end
   counter += 1
 end
-
-# After game over
-  # USER is Codebreaker - end
-
-
-
-
-
-
-
-# If user, then computer needs to be codebreaker => needs class for generating the algorithm
