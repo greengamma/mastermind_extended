@@ -5,14 +5,14 @@ class Codemaker
   def initialize(user_choice)
     @color_selection = ['yellow', 'blue', 'green', 'red', 'orange', 'purple']
     @codemaker_colors = []
-    if user_choice == 2 # user wants to be the codebreaker
+    if user_choice == 2 # comp is the codemaker
       @codemaker_colors = [
                     @color_selection.sample,
                     @color_selection.sample,
                     @color_selection.sample,
                     @color_selection.sample
                     ]
-    else # user wants to be the codemaker
+    else # user is the codemaker
       puts "Input 4 of the following colors to generate your code: 'yellow', 'blue', 'green', 'red', 'orange', 'purple'"
       puts "Select color 1: "
       color1 = gets.chomp
@@ -35,7 +35,7 @@ class Codebreaker
     @codebreaker_colors = []
   end
 
-    if user_choice == 2 # user wants to be the codebreaker
+    if user_choice == 2 # user is the codebreaker
       def get_user_colors(counter)
         @codebreaker_colors = []
         if counter == 0
@@ -64,8 +64,13 @@ class Codebreaker
           @codebreaker_colors.push(color1, color2, color3, color4)
         end
       end
-    else # user wants to be the codemaker
-
+    else # comp is the codebreaker
+      @codemaker_colors = [
+        @color_selection.sample,
+        @color_selection.sample,
+        @color_selection.sample,
+        @color_selection.sample
+        ]
     end
 
   def display_user_colors
