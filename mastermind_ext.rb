@@ -58,7 +58,6 @@ class Codebreaker
   end
 
   def comp_generated_colors(counter, compare_result) # if comp is the codebreaker
-    @codebreaker_colors = []
     if counter == 0
       puts "Computer trying..."
     else
@@ -68,7 +67,6 @@ class Codebreaker
     computer_ai(counter, compare_result) # call computer AI to check computer guess
   end
 
-  # NEW PART: include computer AI (strategy)
   def computer_ai(counter, compare_result)
     if counter == 0 # first try: choose colors randomly
     @codebreaker_colors = [
@@ -78,19 +76,21 @@ class Codebreaker
       @color_selection.sample
       ]
     else # following trials: choose colors based on previous feedback
-      res_list = @color_selection.zip(compare_result)
-      @color_selection = []
+      res_list = @codebreaker_colors.zip(compare_result)
+      @codebreaker_colors = []
+
       res_list.each do |a, b|
         if b == 'black' # if guess was correct, keep that color
-          @color_selection.push(a)
+          @codebreaker_colors.push(a)
         elsif b == '__' # sample another color from reduced color spectrum
-          @codebreaker_colors = @codebreaker_colors - a
-          @color_selection.push(@codebreaker_colors.sample)
+          @color_selection = @color_selection - [a]
+          @codebreaker_colors.push(@color_selection.sample)
+        else
+          @codebreaker_colors.push(@color_selection.sample)
         end
       end
     end
   end
-  # END NEW PART
 
   def display_chosen_colors
     puts "Colors selected: #{@codebreaker_colors}"
