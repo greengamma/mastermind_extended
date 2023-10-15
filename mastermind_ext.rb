@@ -30,7 +30,7 @@ end
 
 # 'Player' class to handle the inputs of the player
 class Codebreaker
-  attr_reader :codebreaker_colors
+  attr_accessor :codebreaker_colors
 
   def initialize
     @color_selection = ['yellow', 'blue', 'green', 'red', 'orange', 'purple']
@@ -57,7 +57,7 @@ class Codebreaker
     @codebreaker_colors.push(color1, color2, color3, color4)
   end
 
-  def comp_generated_colors(counter) # if comp is the codebreaker
+  def comp_generated_colors(counter, compare_result) # if comp is the codebreaker
     @codebreaker_colors = []
     if counter == 0
       puts "Computer trying..."
@@ -65,13 +65,32 @@ class Codebreaker
       puts "Computer trying again..."
       puts "--- ROUND #{counter+1} ---"
     end
+    computer_ai(counter, compare_result) # call computer AI to check computer guess
+  end
+
+  # NEW PART: include computer AI (strategy)
+  def computer_ai(counter, compare_result)
+    if counter == 0 # first try: choose colors randomly
     @codebreaker_colors = [
       @color_selection.sample,
       @color_selection.sample,
       @color_selection.sample,
       @color_selection.sample
       ]
+    else # following trials: choose colors based on previous feedback
+      res_list = @color_selection.zip(compare_result)
+      @color_selection = []
+      res_list.each do |a, b|
+        if b == 'black' # if guess was correct, keep that color
+          @color_selection.push(a)
+        elsif b == '__' # sample another color from reduced color spectrum
+          @codebreaker_colors = @codebreaker_colors - a
+          @color_selection.push(@codebreaker_colors.sample)
+        end
+      end
+    end
   end
+  # END NEW PART
 
   def display_chosen_colors
     puts "Colors selected: #{@codebreaker_colors}"
@@ -134,7 +153,7 @@ until game_over
       puts "You won! The computer chose the following colors: #{codemaker.codemaker_colors}!"
     end
   elsif user_choice == '1' # comp is the codebreaker
-    codebreaker.comp_generated_colors(counter)
+    codebreaker.comp_generated_colors(counter, compare_result)
     puts "\n"
     puts codebreaker.display_chosen_colors
     puts "\n"
