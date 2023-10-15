@@ -119,50 +119,50 @@ class Board
 end
 
 # Prompt to decide who wants to be the codemaker
-puts "Do you want to be the codeMAKER (1) or the codeBREAKER (2)? Select (1 or 2): "
-user_choice = gets.chomp
+  puts "Do you want to be the codeMAKER (1) or the codeBREAKER (2)? Select (1 or 2): "
+  user_choice = gets.chomp
 
 # initialize classes
-codemaker = Codemaker.new(user_choice)
+codemaker = Codemaker.new(@user_choice)
 codebreaker = Codebreaker.new
 board = Board.new(codemaker, codebreaker)
-# run loop a maximum of 12 times and check for game over
-counter = 0
-game_over = false
 
-until game_over
-  if counter == 12
-    if user_choice == '2'
-      puts "You lost!\n"
-      puts "The computer chose the following colors: #{codemaker.codemaker_colors}!"
-      break
-    elsif user_choice == '1'
-      puts "The computer lost!\n"
-      puts "You chose the following colors: #{codemaker.codemaker_colors}!"
-      break
+  # run loop a maximum of 12 times and check for game over
+  counter = 0
+  game_over = false
+  until game_over
+    if counter == 12
+      if user_choice == '2'
+        puts "You lost!\n"
+        puts "The computer chose the following colors: #{codemaker.codemaker_colors}!"
+        break
+      elsif user_choice == '1'
+        puts "The computer lost!\n"
+        puts "You chose the following colors: #{codemaker.codemaker_colors}!"
+        break
+      end
+    elsif user_choice == '2' # user is the codebreaker
+      codebreaker.get_user_colors(counter)
+      puts "\n"
+      puts codebreaker.display_chosen_colors
+      puts "\n"
+      game_over, compare_result = board.compare_codemaker_codebreaker
+      puts "Result: #{compare_result}"
+      puts "\n"
+      if game_over == true
+        puts "You won! The computer chose the following colors: #{codemaker.codemaker_colors}!"
+      end
+    elsif user_choice == '1' # comp is the codebreaker
+      codebreaker.comp_generated_colors(counter, compare_result)
+      puts "\n"
+      puts codebreaker.display_chosen_colors
+      puts "\n"
+      game_over, compare_result = board.compare_codemaker_codebreaker
+      puts "Result: #{compare_result}"
+      puts "\n"
+      if game_over == true
+        puts "The computer won! You chose the following colors: #{codemaker.codemaker_colors}!"
+      end
     end
-  elsif user_choice == '2' # user is the codebreaker
-    codebreaker.get_user_colors(counter)
-    puts "\n"
-    puts codebreaker.display_chosen_colors
-    puts "\n"
-    game_over, compare_result = board.compare_codemaker_codebreaker
-    puts "Result: #{compare_result}"
-    puts "\n"
-    if game_over == true
-      puts "You won! The computer chose the following colors: #{codemaker.codemaker_colors}!"
-    end
-  elsif user_choice == '1' # comp is the codebreaker
-    codebreaker.comp_generated_colors(counter, compare_result)
-    puts "\n"
-    puts codebreaker.display_chosen_colors
-    puts "\n"
-    game_over, compare_result = board.compare_codemaker_codebreaker
-    puts "Result: #{compare_result}"
-    puts "\n"
-    if game_over == true
-      puts "The computer won! You chose the following colors: #{codemaker.codemaker_colors}!"
-    end
+    counter += 1
   end
-  counter += 1
-end
