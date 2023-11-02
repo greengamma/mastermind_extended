@@ -122,7 +122,7 @@ end
   puts "Do you want to be the codeMAKER (1) or the codeBREAKER (2)? Select (1 or 2): "
   user_choice = gets.chomp
 
-# initialized classes
+# initialize classes
 codemaker = Codemaker.new(@user_choice)
 codebreaker = Codebreaker.new
 board = Board.new(codemaker, codebreaker)
